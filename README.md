@@ -1,7 +1,9 @@
-# Estruturas de Dados Avançadas 2026.2 - Trabalho 01
+# Estruturas de Dados Avançadas 2026.2 - Trabalho de persistência
 
-Repositório base para os trabalhos da disciplina de Estruturas de Dados Avançadas (CK0126)/Estruturas de Dados (CKP8077).
-Cada pasta contém a especificação de um trabalho e casos de teste.
+Repositório base para o trabalho de persistência da disciplina de Estruturas de Dados Avançadas (CK0126)/Estruturas de Dados (CKP8077).
+Este arquivo contém informações gerais sobre a organização e entrega do trabalho.
+A descrição detalhada deste trabalho está no arquivo [TRABALHO.md](https://github.com/victoitor/Estruturas-de-Dados-Avancadas/blob/main/TRABALHO.md).
+
 Você pode clonar esse repositório utilizando 
 ```
 git clone https://github.com/victoitor/Estruturas-de-Dados-Avancadas.git
@@ -15,8 +17,8 @@ git clone https://github.com/victoitor/Estruturas-de-Dados-Avancadas.git
 ## Envio
 O envio de todos os trabalhos deve conter:
 - O código-fonte
-- Um arquivo [`Makefile`](https://www.gnu.org/software/make/manual/make.html) que possua as regras `build` para compilar e `run` para rodar o programa
-  - O `run` deve ser capaz de ler um arquivo `.txt` fornecido pela variável `INPUT` que será a entrada do programa.
+- Um arquivo [`Makefile`](https://www.gnu.org/software/make/manual/make.html) que possua as regras `build` para compilar e `run` para rodar o programa.
+  - O `run` deve ser capaz de ler um arquivo de texto fornecido pela variável `INPUT` que será a entrada do programa.
   - Estes comandos devem rodar no Linux.
 - Um arquivo `README.md` com a descrição do seu trabalho, que deve indicar
   - A linguagem de programação usada (incluindo a versão)
@@ -25,7 +27,7 @@ O envio de todos os trabalhos deve conter:
 
 ### Exemplo de `Makefile`
 ```makefile
-INPUT = entrada.txt
+INPUT = entrada.in
 
 build: main.cpp
   g++ -o programa main.cpp
@@ -39,9 +41,9 @@ Aqui temos dois comandos: `build` e `run`.
 - O comando `make build` compila o conteúdo do arquivo `main.cpp` usando o compilador `g++` e cria o programa executável `programa` como saída.
 - O comando `make run` coloca `programa` para rodar passando como entrada o arquivo fornecido pela variável `INPUT`.
 
-Se você quiser utilizar outro arquivo de entrada, como `entrada2.txt`, basta redefinir a variável como a seguir.
+Se você quiser utilizar outro arquivo de entrada, como `entrada2.in`, basta redefinir a variável como a seguir.
 ```
-make run INPUT=entrada2.txt
+make run INPUT=entrada2.in
 ```
 
 ## Entrada e saída
@@ -53,25 +55,25 @@ make run INPUT=entrada2.txt
 
 Parte da nota dos trabalhos vêm do comportamento do seu programa com algumas entradas de teste.
 Cada teste consiste em uma entrada específica e uma saída esperada, seu programa será executado com a entrada e a saída vai ser comparada com a saída esperada.
-O caso de teste só será bem-sucedido se a saída for **exatamente igual** à saída esperada, incluíndo espaços e quebras de linha.
+O caso de teste só será bem-sucedido se a saída for **exatamente igual** à saída esperada, incluindo espaços e quebras de linha.
 
 ### Sugestão para realização de testes
 
 Crie casos de teste formados por pares de entrada e saída esperada.
-Coloque cada entrada em um arquivo (como `entrada1.txt`, `entrada2.txt`, etc.) e cada saída em um outro arquivo (como `saida_esperada1.txt`, `saida_esperada2.txt`, e etc.).
+Coloque cada entrada em um arquivo (como `entrada1.in`, `entrada2.in`, etc.) e cada saída em um outro arquivo (como `saida_esperada1.out`, `saida_esperada2.out`, etc.).
 Execute o seu programa passando a entrada específica e escreva o output em um arquivo para a saída utilizando `>`.
 Exemplo:
 ```
-make run INPUT=entrada1.txt > saida1.txt
+make run INPUT=entrada1.in > saida1.out
 ```
-Isso fará com que a saída do programa com a entrada `entrada1.txt` seja salva no arquivo `saida1.txt`.
+Isso fará com que a saída do programa com a entrada `entrada1.in` seja salva no arquivo `saida1.out`.
 Em seguida, compare a saída com a saída esperada.
 Você pode utilizar o `diff` para isso (ou `fc` no `cmd` do Windows).
 Por exemplo:
 ```
-diff saida1.txt saida_esperada1.txt > diferencas1.txt
+diff saida1.out saida_esperada1.out > diferencas1.txt
 ```
-Se o arquivo `diferencas1.txt` estiver vazio, a saída é igual à saída esperada (o ```fc``` deve dizer ```no differences encountered```).
+Se o arquivo `diferencas1.txt` estiver vazio, a saída é igual à saída esperada (o `fc` deve dizer `no differences encountered`).
 
 Vamos disponibilizar algumas entradas e saídas esperadas para cada trabalho.
 Teste em cada uma delas e sinta-se livre para elaborar outros casos de teste, mas lembre-se: a saída deve ser **exatamente igual** à saída esperada para que o trabalho seja aprovado.

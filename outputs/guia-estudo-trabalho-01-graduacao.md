@@ -26,16 +26,16 @@ As referências nesta seção são **documentos deste projeto**. “Versão” a
 | R3 | `INC N` insere uma ocorrência, inclusive se `N` já existe, e cria versão. | [TRABALHO.md](../TRABALHO.md), § Operações, linhas 22–29. | Busca da posição, novo nó, ajuste persistente de um elo ou da cabeça. |
 | R4 | `REM N` remove **uma** ocorrência. Se ausente, conteúdo fica igual; em todo caso nasce uma versão. | [TRABALHO.md](../TRABALHO.md), § Operações, linhas 31–40; § Versões, linhas 81–83. | Busca do primeiro igual; salto persistente sobre o nó ou repetição da cabeça anterior. |
 | R5 | `SUC N M` imprime a linha do comando e, na linha seguinte, o menor valor **estritamente maior** que `N` na versão `M`, mesmo se `N` não existe. Sem tal valor, imprime `inf`. | [TRABALHO.md](../TRABALHO.md), § Operações, linhas 42–58. | Percurso versionado até a primeira chave `> N`; saída de duas linhas. Para `M` inexistente, aplicar a decisão complementar do usuário descrita no § 2. |
-| R6 | `IMP M` imprime a linha do comando e, na linha seguinte, os elementos crescentes da versão `M`, separados por **vírgula e espaço**; se `M` não existe, usa a versão mais recente; lista vazia produz linha em branco. Não cria versão. | [TRABALHO.md](../TRABALHO.md), § Operações, linhas 60–76. | Consulta à tabela de cabeças, percurso versionado e formatação `, `. Os `.out` divergem; ver § 2. |
+| R6 | `IMP M` imprime a linha do comando e, na linha seguinte, os elementos crescentes da versão `M`, separados por **vírgula e espaço**; se `M` não existe, usa a versão mais recente; lista vazia produz linha em branco. Não cria versão. | [TRABALHO.md](../TRABALHO.md), § Operações, linhas 60–76. | Consulta à tabela de cabeças, percurso versionado e formatação `, `. Os `.out` atuais do professor confirmam o separador; ver § 2. |
 | R7 | A versão 0 é vazia. Cada `INC` e `REM` aumenta o identificador em um; `SUC`/`IMP` não aumentam. | [TRABALHO.md](../TRABALHO.md), § Versões, linhas 79–88. | Contador e tabela de cabeças. |
 | R8 | Entregar código-fonte, `Makefile` com `build` e `run` operantes em Linux, e `README.md` da solução com linguagem/versão e descrição/local de cada função e estrutura. `run` lê o arquivo indicado por `INPUT`; saída no terminal. | [README.md](../README.md), §§ Envio e Entrada e saída, linhas 15–24 e 47–50. | Programa, integração por `make`, documentação da equipe. |
 
 ### Restrições de capacidade e custo
 
-- O sobrecusto multiplicativo de uma operação em qualquer versão deve ser `O(1)` e o espaço **total** com `v` versões deve ser `O(v)` ([TRABALHO.md](../TRABALHO.md), linhas 5–6). No método de cópia de nós, a prova publicada é **amortizada por alteração atômica**; cada leitura de um elo histórico tem custo `O(1)` ([Driscoll et al., § 2.3.4, pp. 96–97](https://www.cs.cmu.edu/~sleator/papers/making-data-structures-persistent.pdf)).
+- O sobrecusto multiplicativo de uma operação em qualquer versão deve ser `O(1)` **amortizado** e o espaço **total** com `v` versões deve ser `O(v)` ([TRABALHO.md](../TRABALHO.md), linhas 5–6). No método de cópia de nós, a prova publicada também é amortizada por alteração atômica; cada leitura de um elo histórico tem custo `O(1)` ([Driscoll et al., § 2.3.4, pp. 96–97](https://www.cs.cmu.edu/~sleator/papers/making-data-structures-persistent.pdf)).
 - Há no máximo **1000** comandos `INC`/`REM`, logo até **1001** versões públicas. Uma tabela de tamanho 1001 para identificadores de versões é **permitida**, não imposta. `SUC` e `IMP` não têm limite de quantidade e não podem fazer a memória crescer por consulta ([TRABALHO.md](../TRABALHO.md), § Versões, linhas 84–88).
 - A equipe de Graduação pode ter até três integrantes ([README.md](../README.md), § Grupos, linhas 10–13).
-- O caminho de entrada vem de `INPUT`. Embora o [README.md](../README.md), linha 19, diga arquivo `.txt`, os arquivos publicados em `testes/` usam extensão `.in`; por isso a implementação deve tratar `INPUT` como caminho de arquivo, sem depender da extensão. Os exemplos começam pelo primeiro comando e acabam no fim do arquivo ([teste01.in](../testes/teste01.in), linhas 1–20).
+- O caminho de entrada vem de `INPUT`. O [README.md](../README.md), linhas 20–21 e 29–30, exemplifica arquivo `.in`, como os arquivos publicados em `testes/`; a implementação trata `INPUT` como caminho de arquivo, sem depender da extensão. Os exemplos começam pelo primeiro comando e acabam no fim do arquivo ([teste01.in](../testes/teste01.in), linhas 1–20).
 
 ### Critérios de avaliação conhecidos
 
@@ -43,16 +43,16 @@ O [README.md](../README.md), § Testes, linhas 52–56 e 76–77, diz que **part
 
 ## 2. Conflitos, lacunas e decisões adotadas
 
-As decisões desta seção foram dadas pelo usuário em 10/10/2026 ou escolhidas como orientação de implementação a partir das fontes de apoio. **Elas não são novas exigências escritas no projeto.**
+As decisões desta seção foram dadas pelo usuário em 10/10/2026 e confirmadas em 19/10/2026 ou escolhidas como orientação de implementação a partir das fontes de apoio. **Elas não são novas exigências escritas no projeto.** O material atual do professor foi comparado byte a byte com os arquivos correspondentes deste projeto em 19/10/2026.
 
 | Ponto | Evidência e leitura prudente | Impacto prático |
 |---|---|---|
-| **Separador de `IMP`: conflito material nos arquivos publicados.** | [TRABALHO.md](../TRABALHO.md), linhas 60–62 e 75–76, exige vírgula e espaço, como `1, 5`. Todos os `.out` publicados apresentam só espaço, por exemplo [teste01.out](../testes/teste01.out), linhas 3–4, e [teste04.out](../testes/teste04.out), linhas 1–2. | **Decisão do usuário:** seguir o enunciado e imprimir `, `. Um `diff` literal contra os `.out` falhará nas linhas com mais de um elemento; essa discrepância deve ser registrada, sem alterar o formatador correto para a convenção escolhida. A decisão não confirma qual formato o corretor automático usará. |
-| **Remoção “idêntica à versão anterior”.** | [TRABALHO.md](../TRABALHO.md), linhas 31–34, manda remover uma ocorrência e depois diz que a nova versão é idêntica à anterior “em ambos os casos”. [teste04.in](../testes/teste04.in), linhas 11–16, e [teste04.out](../testes/teste04.out), linhas 1–2, mostram remoções que mudam o conteúdo. | Interpretar “idêntica” apenas para `REM` sem acerto é a leitura coerente com o restante do projeto; a redação permanece contraditória. |
+| **Separador de `IMP` confirmado.** | [TRABALHO.md](../TRABALHO.md), linhas 60–62 e 75–76, exige vírgula e espaço, como `1, 5`. Os cinco `.out` atuais do professor também usam `, `, por exemplo [teste01.out](../testes/teste01.out), linhas 3–4, e [teste04.out](../testes/teste04.out), linhas 1–2. | **Decisão atual do usuário:** casar exatamente com os arquivos do professor. Usar `, ` e comparar a saída diretamente, byte a byte, com os `.out` publicados. Os `.out` antigos deste projeto tinham só espaços; foram substituídos pelos arquivos atuais do professor. |
+| **Remoção com e sem acerto.** | [TRABALHO.md](../TRABALHO.md), linhas 31–34, agora diz que uma ocorrência deve ser removida quando presente e uma nova versão criada em ambos os casos. [teste04.in](../testes/teste04.in), linhas 11–16, e [teste04.out](../testes/teste04.out), linhas 1–2, mostram remoções que mudam o conteúdo. | Quando há acerto, a nova versão tem uma ocorrência a menos; quando não há, o conteúdo permanece igual. A redação atual não diz mais que ambas seriam idênticas. |
 | **`SUC` com versão inexistente.** | O fallback à última versão é declarado apenas para `IMP` ([TRABALHO.md](../TRABALHO.md), linhas 42–45 e 60–63). | **Decisão do usuário:** usar a versão mais recente também em `SUC`, preservando `M` original na linha que reproduz o comando. É uma convenção complementar; não atribuí-la ao texto do projeto. |
 | **Alcance do método da aula.** | O texto remete a método “descrito em sala”, mas não reproduz seus passos nem especifica `next`/`prev` ([TRABALHO.md](../TRABALHO.md), linhas 3 e 12). A [videoaula, 18:23–19:05 e 24:00–29:24](https://www.youtube.com/watch?v=ZRFl8UyXmxY&t=1103s), demonstra a transformação geral por cópia de nós, com `p=1` para lista simples e `2p` registros; não fala dos comandos deste trabalho. | **Escolha técnica:** lista simples com dois registros e retorno por nó, exatamente a configuração da aula para `p=1`. Não é preciso depender da aceitação de uma variante com um registro. |
 | **Domínio numérico e entradas inválidas.** | O enunciado exige valores de nó não negativos com pelo menos 16 bits, mas não fixa limite superior de `N`, gramática para linhas inválidas nem resposta a valores fora da faixa representável ([TRABALHO.md](../TRABALHO.md), linhas 8 e 22–76). | **Escolha técnica:** fazer a leitura com inteiro assinado de pelo menos 64 bits (ou precisão arbitrária). `INC N` exige `N ≥ 0`; `REM N` com `N < 0` não encontra chave e ainda cria versão; `SUC N M` com `N < 0` retorna a primeira chave, se houver. Assumir linhas bem formadas na avaliação; para linha malformada, `INC` negativo ou número fora da faixa escolhida, emitir erro em `stderr` e encerrar, sem inventar saída em `stdout`. |
-| **Garantia temporal.** | O enunciado fixa sobrecusto `O(1)` sem qualificar amortização ([TRABALHO.md](../TRABALHO.md), linhas 5–6); a [aula, 56:50–1:12:09](https://www.youtube.com/watch?v=ZRFl8UyXmxY&t=3410s) e o [artigo, § 2.3.4](https://www.cs.cmu.edu/~sleator/papers/making-data-structures-persistent.pdf) provam custo amortizado por alteração. | **Escolha técnica:** usar a garantia amortizada do método ensinado para atualizações; cada leitura de elo histórico continua `O(1)` no pior caso. Uma operação completa na lista pode percorrer `O(n)` nós. |
+| **Garantia temporal.** | O enunciado atual qualifica explicitamente o sobrecusto `O(1)` como amortizado ([TRABALHO.md](../TRABALHO.md), linhas 5–6); a [aula, 56:50–1:12:09](https://www.youtube.com/watch?v=ZRFl8UyXmxY&t=3410s) e o [artigo, § 2.3.4](https://www.cs.cmu.edu/~sleator/papers/making-data-structures-persistent.pdf) sustentam essa análise por alteração. | Usar a garantia amortizada do método ensinado para atualizações; cada leitura de elo histórico continua `O(1)` no pior caso. Uma operação completa na lista pode percorrer `O(n)` nós. |
 | **Outras lacunas.** | Não há prazo, rubrica ou peso publicados para os critérios, nem ordem física exigida entre duplicatas. | Essas lacunas não acrescentam passos à estrutura; documentar apenas a convenção de duplicatas escolhida no § 5. |
 
 Os exemplos publicados sugerem que `INC` e `REM` não imprimem linhas, pois os `.out` contêm apenas respostas a `SUC`/`IMP` (por exemplo [teste01.in](../testes/teste01.in) e [teste01.out](../testes/teste01.out)). Isso é evidência dos testes, não uma frase explícita do enunciado.
@@ -107,14 +107,14 @@ IMP 1 observa 2; IMP 2 observa 2, 5; IMP 3 observa 2, 3, 5;
 IMP 4 observa 2, 3, 3, 5. A continua acessível nas versões 1–3.
 ```
 
-No exemplo, a pontuação de `IMP` já segue a decisão de usar **`, `** do enunciado; os arquivos `.out` publicados usam outro separador (§ 2).
+No exemplo, a pontuação de `IMP` segue **`, `**, como no enunciado e nos `.out` atuais do professor (§ 2).
 
 ### Operações
 
 - **`INC N`**: a partir de `head[atual]`, achar o primeiro nó com chave `≥ N` (ou o fim), guardando seu predecessor. Criar um nó de chave `N` que aponta para esse sucessor. Se não há predecessor, a nova cabeça é o nó; senão, substituir de forma persistente o `next` do predecessor. Acrescentar `head[atual+1]`. Escolher antes do primeiro igual ou após o último igual não muda o multiconjunto observável; a primeira opção simplifica a busca.
 - **`REM N`**: achar o primeiro nó com chave `≥ N`. Se a chave não é `N`, acrescentar nova entrada de versão com a mesma cabeça e sem tocar nos nós. Se é `N`, substituir o elo do predecessor pelo `next` do nó encontrado; se o encontrado é a cabeça, a nova cabeça é seu `next`. O nó removido continua disponível para versões antigas.
 - **`SUC N M`**: escolher `versãoEscolhida = M` se existe e `atual` caso contrário, conforme decisão complementar do usuário. Percorrer `head[versãoEscolhida]` com `next(nó, versãoEscolhida)` até a primeira chave `> N`; imprimir essa chave ou `inf`. Chaves iguais a `N` são ignoradas e `N` não precisa estar na lista. Imprimir o comando original, inclusive o `M` recebido, e o resultado em linhas distintas.
-- **`IMP M`**: usar `M` se existe, senão `atual`, e percorrer `next(nó, versãoEscolhida)` até o fim, imprimindo as chaves em ordem com separador **`, `** e sem separador após o último elemento. Imprimir o comando antes; se não há nós, ainda emitir uma linha vazia. Esta escolha segue o enunciado e a orientação do usuário, embora difira dos `.out` publicados.
+- **`IMP M`**: usar `M` se existe, senão `atual`, e percorrer `next(nó, versãoEscolhida)` até o fim, imprimindo as chaves em ordem com separador **`, `** e sem separador após o último elemento. Imprimir o comando antes; se não há nós, ainda emitir uma linha vazia. Esse formato coincide com o enunciado e os `.out` atuais do professor.
 
 Uma atualização pode ter várias mudanças internas com o **mesmo** carimbo da nova versão pública, desde que nenhuma consulta observe o estado intermediário. O artigo trata esse cuidado no processamento de uma operação inteira ([Driscoll et al., §§ 2.3.2–2.3.3, pp. 94–95](https://www.cs.cmu.edu/~sleator/papers/making-data-structures-persistent.pdf)). Se for mais simples numerar mudanças internas separadamente, mantenha um mapa explícito de cada versão pública ao estado interno **final**, como admite [TRABALHO.md](../TRABALHO.md), § Versões, linha 88; não exponha estados parciais por `IMP`/`SUC`.
 
@@ -137,17 +137,17 @@ Para enxergar a amortização **da configuração ensinada**, use como potencial
 | Valor de `N` e parsing | A restrição de inteiro não negativo e pelo menos 16 bits se refere explicitamente aos **valores dos nós**. O projeto não define limite superior nem saída para comandos malformados. | **Adotar inteiro assinado de pelo menos 64 bits** ou precisão arbitrária, ler até EOF, recusar `INC` negativo e tratar `REM`/`SUC` negativos pela ordem matemática; erros de sintaxe ou faixa vão para `stderr`. Essa é uma política local, não um limite oficial. |
 | Duplicatas | Inserir antes ou depois das iguais produz as mesmas chaves impressas e o mesmo sucessor; `REM` tira uma ocorrência. | Inserir antes da primeira chave `≥ N` e remover a primeira chave `= N`. |
 | `SUC` em versão inválida | O enunciado só define o fallback para `IMP`. | **Usar a última versão**, conforme decisão do usuário, mantendo a linha do comando original na saída. |
-| Formato de `IMP` | Texto: vírgula e espaço; `.out`: espaço simples. | **Usar `, `**, conforme enunciado e decisão do usuário. Os `.out` publicados não servem como oráculo literal de formatação nessas linhas. |
+| Formato de `IMP` | O enunciado e os cinco `.out` atuais usam vírgula seguida de espaço. | **Usar `, `** e comparar a saída diretamente com os `.out` do professor. |
 | Custo da transformação | Os materiais de apoio provam custo amortizado por escrita; uma cascata isolada pode custar `O(n)`. | **Usar a análise amortizada** da aula e distinguir esse custo do percurso `O(n)` da lista (§ 4). |
 
 ## 6. Plano de implementação e casos de teste
 
-1. **Fixar o contrato de entrada e saída:** registrar `IMP` com `, ` do enunciado e fallback à última versão para `SUC` inválido por decisão do usuário. Manter separadas as duas origens dessas regras; preparar saídas esperadas próprias para os testes de formatação.
+1. **Fixar o contrato de entrada e saída:** registrar `IMP` com `, ` do enunciado e dos `.out` e fallback à última versão para `SUC` inválido por decisão do usuário. Manter separadas as origens dessas regras; usar os `.out` publicados como oráculo dos cinco casos fornecidos.
 2. **Implementar primeiro as operações de lista ordenada** na versão corrente: busca de predecessor, duplicatas, remoção de uma ocorrência, sucessor estrito e percurso. Verificar ordenação depois de cada atualização.
 3. **Acrescentar a tabela de cabeças e a leitura versionada de `next`**, com `head[0] = ∅`; consultar versões antigas após várias inclusões.
 4. **Introduzir dois registros, retorno corrente e cópia propagada.** Testar a primeira e a segunda gravação em registros livres, a terceira com cópia de um nó e uma cascata até a cabeça. Conferir os retornos após inserção, remoção e cópia; só publicar `head[t]` após concluir a atualização.
-5. **Integrar o protocolo de entrada/saída e entrega:** ler o arquivo apontado por `INPUT` até EOF, responder consultas em fluxo, escrever o `Makefile` Linux e o README exigido. Comparar saída **byte a byte** com um oráculo que use `, ` e o fallback decidido para `SUC`.
-6. **Auditar os limites:** contar nós e cabeças em sequências de até 1000 atualizações; repetir muitas consultas sem aumento de memória; executar os cinco pares publicados para conferir a semântica e registrar as diferenças previsíveis de separador diante dos `.out` originais.
+5. **Integrar o protocolo de entrada/saída e entrega:** ler o arquivo apontado por `INPUT` até EOF, responder consultas em fluxo, escrever o `Makefile` Linux e o README exigido. Comparar a saída **byte a byte** com os cinco `.out` publicados; criar oráculos adicionais para casos que eles não cobrem.
+6. **Auditar os limites:** contar nós e cabeças em sequências de até 1000 atualizações; repetir muitas consultas sem aumento de memória; executar os cinco pares publicados e exigir igualdade literal com os `.out` atuais.
 
 | Caso de teste | Sequência ou verificação | Propriedade esperada |
 |---|---|---|
@@ -165,10 +165,10 @@ Para enxergar a amortização **da configuração ensinada**, use como potencial
 | Cascata até a cabeça | `INC 30`, `INC 20`, `INC 10`, `INC 20`, `REM 20`, `INC 30`, `REM 30`, `INC 25`; consultar versões 3, 5, 7 e 8 | Inserir antes da primeira igual e remover a primeira igual preenche os dois registros dos nós 10 e 20, mantendo a lista `10, 20, 30`; a última inserção força cópia de 20 e depois de 10. A versão 8 é `10, 20, 25, 30`; as anteriores permanecem `10, 20, 30`. |
 | Limites de versões | 1000 atualizações misturadas; consultar 0 e 1000 | `head[1000]` existe, `head[0]` permanece vazia; espaço cresce linearmente. |
 | Versão inexistente em `IMP` | `INC 7`, `IMP 99` | Deve imprimir a versão mais recente, preservando `IMP 99` na linha de comando. |
-| Entrada e bytes de saída | `make build`; `make run INPUT=testes/teste01.in`; comparação com oráculo próprio e com `.out` publicado | Conferir caminho `.in`, ausência de saídas extras, espaços e quebras de linha. O oráculo próprio usa `, `; um `diff` bruto com `.out` publicado deve apontar a discrepância nas linhas `IMP` com vários itens. |
+| Entrada e bytes de saída | `make build`; `make run INPUT=testes/teste01.in`; comparação direta com `testes/teste01.out` | Conferir caminho `.in`, ausência de saídas extras, vírgulas, espaços e quebras de linha. Um `diff` bruto deve passar após implementar todas as operações. |
 | Muitas consultas | Repetir `SUC`/`IMP` sem novas atualizações | Número de versões e nós não cresce; memória não depende da quantidade de consultas. |
 
-Os cinco pares em [`testes/`](../testes/) cobrem inserções, remoções, consultas históricas, `REM` ausente, versão 0 e `IMP` fora do intervalo; **não** cobrem duplicatas nem `SUC` com versão inválida. O separador neles diverge da regra adotada. Um oráculo simples de multiconjuntos por versão serve para comparar a semântica em testes pequenos, mas a estrutura entregue deve respeitar `O(v)` espaço.
+Os cinco pares em [`testes/`](../testes/) cobrem inserções, remoções, consultas históricas, `REM` ausente, versão 0 e `IMP` fora do intervalo; **não** cobrem duplicatas nem `SUC` com versão inválida. O separador `, ` coincide com a regra adotada. Um oráculo simples de multiconjuntos por versão serve para comparar a semântica em testes pequenos, mas a estrutura entregue deve respeitar `O(v)` espaço.
 
 ## 7. Fontes usadas e limites de acesso
 
@@ -176,7 +176,7 @@ Os cinco pares em [`testes/`](../testes/) cobrem inserções, remoções, consul
 
 - [TRABALHO.md](../TRABALHO.md), abertura e §§ Graduação, Operações, Versões, linhas 1–88: estrutura, operações, limites, versionamento e formato textual de `IMP`.
 - [README.md](../README.md), §§ Grupos, Envio, Entrada e saída, Testes, linhas 10–77: entrega Linux, `INPUT`, saída e comparação exata.
-- [testes](../testes/) 01–05: evidência de exemplos efetivos de entrada/saída, especialmente o separador conflitante; são exemplos publicados, não uma especificação substituta.
+- [testes](../testes/) 01–05: exemplos efetivos de entrada/saída, com `, ` nas linhas de `IMP`; são casos publicados, não uma especificação substituta.
 
 ### Fontes explicativas externas e anotações
 
@@ -214,8 +214,8 @@ O vídeo 4-2, “Planar Point Location via Persistence”, listado na [página d
 
 ### Lacunas que permanecem nos documentos
 
-- Não está documentado se o corretor automático seguirá o separador do [enunciado](../TRABALHO.md) ou dos [`.out`](../testes/). O guia segue **`, `**, conforme decisão do usuário; o risco de divergência na comparação literal permanece.
+- O [enunciado](../TRABALHO.md) e os [`.out`](../testes/) atuais concordam no separador **`, `**. Ainda não há descrição dos casos ocultos nem garantia de que todos os detalhes de formatação estejam cobertos pelos exemplos.
 - Não há limite máximo de `N` nem saída prescrita para comandos malformados ou números fora da faixa escolhida. Inteiro amplo e erro em `stderr` são decisões locais (§§ 2 e 5), não requisitos publicados.
-- As fontes não dizem se a especialização de um registro seria aceita, mas a implementação recomendada usa os **dois registros e retornos da aula**. A prova vista na aula é amortizada; não foi encontrada uma exigência explícita de custo de atualização no pior caso além da formulação geral do enunciado.
+- As fontes não dizem se a especialização de um registro seria aceita, mas a implementação recomendada usa os **dois registros e retornos da aula**. A prova vista na aula é amortizada, em acordo com o `O(1)` amortizado agora explícito no enunciado; não há exigência de custo `O(1)` no pior caso por alteração.
 - A rubrica, os pesos e eventuais casos ocultos de avaliação não aparecem nos documentos disponíveis.
 

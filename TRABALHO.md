@@ -2,7 +2,7 @@
 
 O objetivo do trabalho é implementar uma estrutura de dados que suporta persistência parcial seguindo o método descrito em sala.
 
-- A complexidade de uma operação em qualquer versão deve ter um custo adicional multiplicativo de `O(1)`.
+- A complexidade de uma operação em qualquer versão deve ter um custo adicional multiplicativo de `O(1)` amortizado.
 - Se sua estrutura tem `v` versões, o espaço total utilizado deve ser `O(v)`.
 
 Cada nó da sua estrutura deve armazenar um valor inteiro não negativo com pelo menos 16 bits e valores repetidos são permitidos.
@@ -31,7 +31,7 @@ INC 80
 - **Remoção:** Uma operação de remoção será identificada por uma linha como `REM N`.
 Um elemento com este valor deve ser removido (apenas um se houver repetição).
 Caso não haja um nó com o valor especificado, a estrutura não deve ser alterada.
-Em ambos os casos uma nova versão deve ser criada, identica à versão anterior.
+Em ambos os casos uma nova versão deve ser criada.
 
 Exemplo de linha de remoção:
 
@@ -83,6 +83,8 @@ IMP 20
   - Operações de remoção que não removem nenhum elemento ainda aumentam a versão em 1.
 - Haverá no máximo 1000 operações de inclusão e/ou remoção.
   - No máximo 1001 versões diferentes da estrutura precisam ser armazenadas.
-  - Identificadores das versões (raiz da estrutura e em quais versões ela opera) podem ser guardados num vetor de tamanho 1001.
+  - Identificadores das versões (contendo a raiz da estrutura e qualquer outra informação que você precisar) podem ser guardados num vetor de tamanho 1001.
 - Não há limite para o número de operações de sucessor e de impressão, mas estas não criam novas versões.
-- Sua estrutura de dados pode criar "versões parciais" para modificações que ocorrem entre versões (uma única inserção pode ocasionar mais de uma modificação na estrutura durante as atualizações, então tenha o cuidado de marcar quais modificações interessam para a entrada).
+- Sua estrutura de dados pode criar "_versões parciais_" para operações de inclusão ou remoção.
+  - Uma única inserção pode ocasionar mais de uma modificação de campo na sua estrutura.
+  - Tenha o cuidado de separar identificadores de versão internos à sua estrutura de identificadores de versão usados no arquivo de entrada.

@@ -14,6 +14,8 @@ sh test_issue01.sh
 
 `run` recebe o caminho de `INPUT` como argumento do programa. A extensão do arquivo não importa. Respostas válidas vão somente para `stdout`; erros de entrada vão para `stderr` com código de saída diferente de zero.
 
+Ao implementar `IMP` para listas não vazias na issue #2, separar os elementos com **vírgula e um espaço** (`1, 2`), exatamente como em `TRABALHO.md` e nos cinco `testes/*.out` atuais do professor. A versão atual ainda só imprime a lista vazia.
+
 ## Arquivos e componentes atuais
 
 - `main.cpp`: `parse_integer` valida inteiros assinados de 64 bits; `parse_command` valida o nome e os argumentos dos quatro comandos; `main` abre o arquivo, lê até EOF e responde `IMP` da lista vazia.

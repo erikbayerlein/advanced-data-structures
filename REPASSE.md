@@ -10,13 +10,15 @@ Use [TRABALHO.md](TRABALHO.md) e [README.md](README.md) como fontes dos requisit
 
 **Decisões já tomadas:** `IMP` deve separar os valores com **`, `**, conforme o enunciado e a escolha do usuário. Para `SUC` com versão `M` inexistente, consultar a versão mais recente, também por escolha do usuário; o enunciado explicita esse fallback somente para `IMP`. A implementação recomendada no guia é uma lista simples, com cópia de nós, dois registros de modificação e um retorno para o predecessor corrente por nó (`p=1`), como na videoaula do professor. Essa representação é uma escolha técnica fundamentada, não uma exigência textual de quantidade de campos.
 
-**Atenção à avaliação:** os cinco arquivos `.out` publicados usam espaço simples em `IMP`, em conflito com o `, ` do enunciado. Conservar os exemplos originais e criar saídas esperadas próprias para a decisão adotada. A comparação de saída é literal, incluindo espaços e quebras de linha. O formato que o corretor usará não foi esclarecido.
+**Atenção à avaliação:** o enunciado e os cinco arquivos `.out` atuais do professor usam `, ` em `IMP`. Esses arquivos foram sincronizados com [`testes/`](testes/) e devem ser comparados literalmente, incluindo vírgulas, espaços e quebras de linha. Casos além dos exemplos publicados ainda precisam de saídas esperadas próprias.
+
+**Origem dos arquivos sincronizados:** revisão `e2ced43c86d24ffc83307ef693f99d9ae00c8fc8` do [repositório do professor](https://github.com/victoitor/Estruturas-de-Dados-Avancadas).
 
 ## O que já foi feito
 
 1. Análise dos documentos e dos cinco pares de testes, restrita à Graduação, registrada no [guia de estudo](outputs/guia-estudo-trabalho-01-graduacao.md).
 2. Criação e vinculação do [GitHub Project](https://github.com/users/erikbayerlein/projects/6) ao repositório; as issues [#1](https://github.com/erikbayerlein/advanced-data-structures/issues/1) a [#7](https://github.com/erikbayerlein/advanced-data-structures/issues/7) foram publicadas e ordenadas por prefixo `[01/07]` a `[07/07]`.
-3. O repositório já oferece os casos de entrada e saída em [`testes/`](testes/) e modelos em [`trabalhos/nome-equipe/`](trabalhos/nome-equipe/). **São materiais de partida, não a solução:** o `Makefile` do modelo depende de `main.cpp` inexistente e seu README descreve uma BST.
+3. Os 20 arquivos atuais da pasta do professor foram inspecionados e permanecem idênticos byte a byte aos originais: enunciado, README, cinco pares `.in`/`.out`, modelos, `.gitignore` e os cinco arquivos de `.devcontainer`. Esta última pasta configura apenas o ambiente de desenvolvimento. **São materiais de partida, não a solução:** o `Makefile` do modelo depende de `main.cpp` inexistente e seu README descreve uma BST.
 4. **Issue #1 concluída:** a solução começou em [`trabalhos/graduacao/`](trabalhos/graduacao/), em **C++17**, com `Makefile`, parser, tabela de cabeças iniciada na versão 0 vazia, `IMP` dessa versão e [teste executável](trabalhos/graduacao/test_issue01.sh). `make build` e `sh test_issue01.sh` passaram no macOS e em um contêiner Linux Alpine com `g++` e `make`. O teste compara `IMP 0` e `IMP 99` byte a byte, repete com `.txt`, e verifica arquivo ausente e comando malformado. `INC`, `REM` e `SUC` são reconhecidos, mas ainda retornam erro sem resposta fictícia.
 
 **Ainda não existe** a lista persistente, nem as operações completas `INC`, `REM`, `SUC` e `IMP` para versões não vazias. A suíte abrangente é a issue #5; o README da solução ainda é inicial e será completado na #7. O nome `trabalhos/graduacao` pode ser ajustado se a equipe definir outro nome de entrega. O Project está privado, embora as issues sejam públicas; quem for usar o quadro precisa ter acesso.
@@ -31,7 +33,7 @@ Use [TRABALHO.md](TRABALHO.md) e [README.md](README.md) como fontes dos requisit
 
 ### 3. [#3 — `REM` persistente de uma ocorrência](https://github.com/erikbayerlein/advanced-data-structures/issues/3)
 
-**Fazer:** remover somente a primeira ocorrência encontrada na versão corrente. Atualizar persistentemente o elo do predecessor ou a cabeça. Se a chave estiver ausente, publicar uma nova versão com a mesma cabeça e sem mudar o conteúdo. Reutilizar o mecanismo de cópias da #2 e manter os retornos correntes coerentes. A frase “idêntica em ambos os casos” do enunciado é contraditória; exemplos e operação de remoção sustentam conteúdo idêntico apenas quando não houve acerto.
+**Fazer:** remover somente a primeira ocorrência encontrada na versão corrente. Atualizar persistentemente o elo do predecessor ou a cabeça. Se a chave estiver ausente, publicar uma nova versão com a mesma cabeça e sem mudar o conteúdo. Reutilizar o mecanismo de cópias da #2 e manter os retornos correntes coerentes. O enunciado atual explicita que a versão nova surge tanto com acerto quanto sem acerto; só a remoção sem acerto preserva o conteúdo.
 
 **Testar:** cobrir remoção na cabeça, no meio, na cauda, de duplicatas, de chave ausente e da lista vazia. Para uma cascata de cópias, executar `INC 30`, `INC 20`, `INC 10`, `INC 20`, `REM 20`, `INC 30`, `REM 30`, `INC 25`: versões 3, 5 e 7 devem conter `10, 20, 30`; versão 8, `10, 20, 25, 30`. Conferir as entradas `teste04.in` e `teste05.in`.
 
@@ -43,9 +45,9 @@ Use [TRABALHO.md](TRABALHO.md) e [README.md](README.md) como fontes dos requisit
 
 ### 5. [#5 — Regressão de comandos e saída exata](https://github.com/erikbayerlein/advanced-data-structures/issues/5)
 
-**Fazer:** criar um comando de teste reproduzível que compile, execute arquivos de entrada e compare o `stdout` **byte a byte**. Exercitar os cinco `.in` publicados e criar oráculos próprios com `, ` para `IMP`; não editar os `.out` originais nem normalizar espaços. Acrescentar casos ausentes nos exemplos: duplicatas, versões inválidas em `IMP`/`SUC`, `REM` ausente, versão 0, consultas intercaladas e saída vazia.
+**Fazer:** criar um comando de teste reproduzível que compile, execute os cinco `.in` publicados e compare o `stdout` **byte a byte** com os `.out` correspondentes do professor. Não normalizar vírgulas, espaços ou quebras de linha. Criar oráculos próprios só para casos adicionais: duplicatas, versões inválidas em `IMP`/`SUC`, `REM` ausente, versão 0, consultas intercaladas e saída vazia.
 
-**Testar:** o comando de teste deve passar na solução correta e falhar ao mudar uma vírgula, espaço, quebra de linha, `inf`, versão ou resposta histórica. Comparar também os exemplos publicados para separar a divergência conhecida de separador de qualquer erro semântico. O `stdout` de `INC`/`REM` deve ficar vazio.
+**Testar:** o comando de teste deve passar na solução correta e falhar ao mudar uma vírgula, espaço, quebra de linha, `inf`, versão ou resposta histórica. O `stdout` de `INC`/`REM` deve ficar vazio.
 
 ### 6. [#6 — Invariantes e limites de tempo e memória](https://github.com/erikbayerlein/advanced-data-structures/issues/6)
 
@@ -66,16 +68,16 @@ Entre na pasta [`trabalhos/graduacao/`](trabalhos/graduacao/). A verificação a
 ```sh
 make build
 make run INPUT=../../testes/teste01.in > /tmp/trabalho01-obtido.out
-diff -u /tmp/trabalho01-esperado.out /tmp/trabalho01-obtido.out
+diff -u ../../testes/teste01.out /tmp/trabalho01-obtido.out
 ```
 
-Crie `/tmp/trabalho01-esperado.out` com as linhas `IMP` separadas por `, `; os `.out` publicados não servem como oráculo literal dessas linhas. Ajuste o caminho relativo de `INPUT` se a pasta escolhida mudar. Um `diff` sem saída indica igualdade de bytes; a suíte da #5 deverá tornar uma diferença em falha. **Ainda não rode os cinco `.in` como teste de aceite:** eles exigem as operações das issues #2 a #4.
+Os `.out` atuais servem como oráculo literal dos cinco pares publicados. Ajuste o caminho relativo de `INPUT` se a pasta escolhida mudar. Um `diff` sem saída indica igualdade de bytes; a suíte da #5 deverá tornar uma diferença em falha. **Ainda não rode os cinco `.in` como teste de aceite:** eles exigem as operações das issues #2 a #4.
 
 ## Decisões ainda abertas e limites da informação
 
 - Confirmar se `trabalhos/graduacao/` será o nome definitivo da pasta da equipe. A linguagem inicial escolhida é C++17.
 - O enunciado não fixa um limite superior de `N` nem a resposta a comandos inválidos. O guia sugere inteiro assinado de pelo menos 64 bits (ou precisão arbitrária), rejeitar `INC` negativo e reportar entrada inválida em `stderr`. Documentar a política escolhida sem tratá-la como requisito oficial.
-- Não há informação publicada sobre pesos da avaliação, casos ocultos, prazo, ou se o corretor seguirá o enunciado ou os `.out` no separador de `IMP`. A escolha registrada do usuário é `, `.
+- Não há informação publicada sobre pesos da avaliação, casos ocultos ou prazo. O separador de `IMP` é `, ` tanto no enunciado quanto nos `.out` atuais.
 
 ## Skills sugeridas para continuar
 
