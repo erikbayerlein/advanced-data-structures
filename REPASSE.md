@@ -1,6 +1,6 @@
 # Repasse — Trabalho 01 de Graduação
 
-**Estado conferido em 19/10/2026.** Repositório em `main`, commit `2db0bb6`, sem alterações locais antes da criação deste arquivo. O [GitHub Project advanced-data-structures](https://github.com/users/erikbayerlein/projects/6) contém as sete issues abaixo, em ordem, todas abertas e em **Todo**. Nenhum critério de aceite foi marcado; não há PR associado.
+**Estado atualizado em 19/10/2026.** A issue [#1](https://github.com/erikbayerlein/advanced-data-structures/issues/1) foi implementada e verificada. As issues [#2](https://github.com/erikbayerlein/advanced-data-structures/issues/2) a [#7](https://github.com/erikbayerlein/advanced-data-structures/issues/7) seguem como próximas etapas, na ordem do [GitHub Project advanced-data-structures](https://github.com/users/erikbayerlein/projects/6).
 
 ## Escopo e fontes
 
@@ -17,16 +17,11 @@ Use [TRABALHO.md](TRABALHO.md) e [README.md](README.md) como fontes dos requisit
 1. Análise dos documentos e dos cinco pares de testes, restrita à Graduação, registrada no [guia de estudo](outputs/guia-estudo-trabalho-01-graduacao.md).
 2. Criação e vinculação do [GitHub Project](https://github.com/users/erikbayerlein/projects/6) ao repositório; as issues [#1](https://github.com/erikbayerlein/advanced-data-structures/issues/1) a [#7](https://github.com/erikbayerlein/advanced-data-structures/issues/7) foram publicadas e ordenadas por prefixo `[01/07]` a `[07/07]`.
 3. O repositório já oferece os casos de entrada e saída em [`testes/`](testes/) e modelos em [`trabalhos/nome-equipe/`](trabalhos/nome-equipe/). **São materiais de partida, não a solução:** o `Makefile` do modelo depende de `main.cpp` inexistente e seu README descreve uma BST.
+4. **Issue #1 concluída:** a solução começou em [`trabalhos/graduacao/`](trabalhos/graduacao/), em **C++17**, com `Makefile`, parser, tabela de cabeças iniciada na versão 0 vazia, `IMP` dessa versão e [teste executável](trabalhos/graduacao/test_issue01.sh). `make build` e `sh test_issue01.sh` passaram no macOS e em um contêiner Linux Alpine com `g++` e `make`. O teste compara `IMP 0` e `IMP 99` byte a byte, repete com `.txt`, e verifica arquivo ausente e comando malformado. `INC`, `REM` e `SUC` são reconhecidos, mas ainda retornam erro sem resposta fictícia.
 
-**Ainda não existe** código-fonte da lista, README específico da solução, `Makefile` funcional para ela ou suíte automatizada. Não há programa a executar neste estado. Escolher primeiro a pasta real da equipe e a linguagem/versão; o nome `trabalhos/nome-equipe` é apenas um exemplo do repositório. O Project está privado, embora as issues sejam públicas; quem for usar o quadro precisa ter acesso.
+**Ainda não existe** a lista persistente, nem as operações completas `INC`, `REM`, `SUC` e `IMP` para versões não vazias. A suíte abrangente é a issue #5; o README da solução ainda é inicial e será completado na #7. O nome `trabalhos/graduacao` pode ser ajustado se a equipe definir outro nome de entrega. O Project está privado, embora as issues sejam públicas; quem for usar o quadro precisa ter acesso.
 
 ## O que falta fazer, em ordem
-
-### 1. [#1 — Execução Linux, leitura de comandos e versão 0](https://github.com/erikbayerlein/advanced-data-structures/issues/1)
-
-**Fazer:** criar a pasta real da entrega, escolher a linguagem, iniciar o programa e um `Makefile` com `build` e `run`. `run` deve abrir o caminho passado por `INPUT`, qualquer que seja a extensão, e ler comandos até EOF. Inicializar a versão 0 vazia. Como primeiro comportamento completo, responder `IMP 0` e `IMP M` inexistente com a linha original do comando e uma linha vazia. Erros de arquivo ou de sintaxe devem ir a `stderr`, segundo a política local proposta no guia.
-
-**Testar:** executar `make build` e `make run INPUT=<arquivo-de-teste>` em Linux. Um arquivo com `IMP 0` e `IMP 99` deve produzir duas respostas de duas linhas, com a segunda linha de cada resposta vazia. Comparar bytes e conferir que não aparecem mensagens de `make`, depuração ou erro no `stdout` válido. Verificar também arquivo ausente e entrada malformada.
 
 ### 2. [#2 — `INC` persistente e `IMP` histórico](https://github.com/erikbayerlein/advanced-data-structures/issues/2)
 
@@ -66,7 +61,7 @@ Use [TRABALHO.md](TRABALHO.md) e [README.md](README.md) como fontes dos requisit
 
 ## Como executar a verificação de saída
 
-Depois da #1, entre na pasta real da entrega. Se ela estiver diretamente em `trabalhos/<nome-da-equipe>/`, um exemplo de execução é:
+Entre na pasta [`trabalhos/graduacao/`](trabalhos/graduacao/). A verificação automatizada da etapa concluída é `sh test_issue01.sh`. Depois de implementar as issues #2 a #4, um exemplo para as entradas publicadas será:
 
 ```sh
 make build
@@ -74,11 +69,11 @@ make run INPUT=../../testes/teste01.in > /tmp/trabalho01-obtido.out
 diff -u /tmp/trabalho01-esperado.out /tmp/trabalho01-obtido.out
 ```
 
-Crie `/tmp/trabalho01-esperado.out` com as linhas `IMP` separadas por `, `; os `.out` publicados não servem como oráculo literal dessas linhas. Ajuste o caminho relativo de `INPUT` se a pasta escolhida for outra. Um `diff` sem saída indica igualdade de bytes; sua suíte automatizada deve tornar uma diferença em falha. Antes da #1, estes comandos **não funcionam**, pois só existe o `Makefile` de exemplo e não há código-fonte.
+Crie `/tmp/trabalho01-esperado.out` com as linhas `IMP` separadas por `, `; os `.out` publicados não servem como oráculo literal dessas linhas. Ajuste o caminho relativo de `INPUT` se a pasta escolhida mudar. Um `diff` sem saída indica igualdade de bytes; a suíte da #5 deverá tornar uma diferença em falha. **Ainda não rode os cinco `.in` como teste de aceite:** eles exigem as operações das issues #2 a #4.
 
 ## Decisões ainda abertas e limites da informação
 
-- Definir pasta da equipe, linguagem e versão. O README geral permite diferentes linguagens; o exemplo em C++ não as impõe.
+- Confirmar se `trabalhos/graduacao/` será o nome definitivo da pasta da equipe. A linguagem inicial escolhida é C++17.
 - O enunciado não fixa um limite superior de `N` nem a resposta a comandos inválidos. O guia sugere inteiro assinado de pelo menos 64 bits (ou precisão arbitrária), rejeitar `INC` negativo e reportar entrada inválida em `stderr`. Documentar a política escolhida sem tratá-la como requisito oficial.
 - Não há informação publicada sobre pesos da avaliação, casos ocultos, prazo, ou se o corretor seguirá o enunciado ou os `.out` no separador de `IMP`. A escolha registrada do usuário é `, `.
 
