@@ -13,6 +13,7 @@ public:
     PersistentList();
 
     void include(std::int64_t key);
+    void remove(std::int64_t key);
     void print(std::int64_t requested_version, std::ostream& output) const;
 
     std::size_t version_count() const noexcept;

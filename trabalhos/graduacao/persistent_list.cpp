@@ -76,6 +76,34 @@ void PersistentList::include(std::int64_t key) {
     heads_.push_back(head);
 }
 
+void PersistentList::remove(std::int64_t key) {
+    const std::size_t previous_version = heads_.size() - 1;
+    const std::size_t new_version = heads_.size();
+    Node* head = heads_.back();
+    Node* predecessor = nullptr;
+    Node* current = head;
+    while (current != nullptr && current->key < key) {
+        predecessor = current;
+        current = next_at(current, previous_version);
+    }
+
+    if (current == nullptr || current->key != key) {
+        heads_.push_back(head);
+        return;
+    }
+
+    Node* const successor = next_at(current, previous_version);
+    if (predecessor == nullptr) {
+        head = successor;
+        if (successor != nullptr) {
+            successor->predecessor = nullptr;
+        }
+    } else {
+        write_next(predecessor, successor, new_version, head);
+    }
+    heads_.push_back(head);
+}
+
 std::size_t PersistentList::resolve_version(
     std::int64_t requested_version) const noexcept {
     if (requested_version >= 0 &&

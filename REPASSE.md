@@ -1,6 +1,6 @@
 # Repasse — Trabalho 01 de Graduação
 
-**Estado atualizado em 20/10/2026.** As issues [#1](https://github.com/erikbayerlein/advanced-data-structures/issues/1) e [#2](https://github.com/erikbayerlein/advanced-data-structures/issues/2) foram implementadas e verificadas. As issues [#3](https://github.com/erikbayerlein/advanced-data-structures/issues/3) a [#7](https://github.com/erikbayerlein/advanced-data-structures/issues/7) são as próximas etapas, na ordem do [GitHub Project advanced-data-structures](https://github.com/users/erikbayerlein/projects/6).
+**Estado atualizado em 20/10/2026.** As issues [#1](https://github.com/erikbayerlein/advanced-data-structures/issues/1), [#2](https://github.com/erikbayerlein/advanced-data-structures/issues/2) e [#3](https://github.com/erikbayerlein/advanced-data-structures/issues/3) foram implementadas e verificadas. As issues [#4](https://github.com/erikbayerlein/advanced-data-structures/issues/4) a [#7](https://github.com/erikbayerlein/advanced-data-structures/issues/7) são as próximas etapas, na ordem do [GitHub Project advanced-data-structures](https://github.com/users/erikbayerlein/projects/6).
 
 ## Escopo e fontes
 
@@ -21,16 +21,11 @@ Use [TRABALHO.md](TRABALHO.md) e [README.md](README.md) como fontes dos requisit
 3. Os 20 arquivos atuais da pasta do professor foram inspecionados e permanecem idênticos byte a byte aos originais: enunciado, README, cinco pares `.in`/`.out`, modelos, `.gitignore` e os cinco arquivos de `.devcontainer`. Esta última pasta configura apenas o ambiente de desenvolvimento. **São materiais de partida, não a solução:** o `Makefile` do modelo depende de `main.cpp` inexistente e seu README descreve uma BST.
 4. **Issue #1 concluída:** a solução começou em [`trabalhos/graduacao/`](trabalhos/graduacao/), em **C++17**, com `Makefile`, parser, tabela de cabeças iniciada na versão 0 vazia, `IMP` dessa versão e [teste executável](trabalhos/graduacao/test_issue01.sh). `make build` e `sh test_issue01.sh` passaram no macOS e em um contêiner Linux Alpine com `g++` e `make`. O teste compara `IMP 0` e `IMP 99` byte a byte, repete com `.txt`, e verifica arquivo ausente e comando malformado.
 5. **Issue #2 implementada:** [`persistent_list.hpp`](trabalhos/graduacao/persistent_list.hpp) e [`persistent_list.cpp`](trabalhos/graduacao/persistent_list.cpp) contêm a lista simples parcialmente persistente com dois registros de modificação, retorno corrente e cópia propagada; `main.cpp` executa `INC` e `IMP`. [`test_issue02.sh`](trabalhos/graduacao/test_issue02.sh) compara byte a byte `teste01` e `teste02` do professor e testa casos adicionais. O teste estrutural verifica duas gravações e cópia na terceira, uma cascata, predecessores correntes, 250 inclusões variadas e versões históricas. `sh test_issue01.sh`, `sh test_issue02.sh` e a execução do teste estrutural com sanitizadores passaram.
+6. **Issue #3 implementada:** `PersistentList::remove` retira a primeira ocorrência encontrada, ou apenas publica outra versão quando a chave não existe. Reutiliza `write_next` para os reparos e conserva versões antigas. [`test_issue03.sh`](trabalhos/graduacao/test_issue03.sh) verifica remoções, duplicatas, esvaziamento, remoções ausentes, 300 atualizações variadas e a cascata de dois nós. Também compara os `IMP` de `teste04` e `teste05` com os `.out` originais após retirar somente os comandos `SUC` das entradas temporárias.
 
-**Ainda faltam** `REM` e `SUC`, a suíte abrangente da issue #5 e a documentação final da #7. O nome `trabalhos/graduacao` pode ser ajustado se a equipe definir outro nome de entrega. O Project está privado, embora as issues sejam públicas; quem for usar o quadro precisa ter acesso.
+**Ainda faltam** `SUC`, a suíte abrangente da issue #5, a auditoria da #6 e a documentação final da #7. O nome `trabalhos/graduacao` pode ser ajustado se a equipe definir outro nome de entrega. O Project está privado, embora as issues sejam públicas; quem for usar o quadro precisa ter acesso.
 
 ## O que falta fazer, em ordem
-
-### 3. [#3 — `REM` persistente de uma ocorrência](https://github.com/erikbayerlein/advanced-data-structures/issues/3)
-
-**Fazer:** remover somente a primeira ocorrência encontrada na versão corrente. Atualizar persistentemente o elo do predecessor ou a cabeça. Se a chave estiver ausente, publicar uma nova versão com a mesma cabeça e sem mudar o conteúdo. Reutilizar o mecanismo de cópias da #2 e manter os retornos correntes coerentes. O enunciado atual explicita que a versão nova surge tanto com acerto quanto sem acerto; só a remoção sem acerto preserva o conteúdo.
-
-**Testar:** cobrir remoção na cabeça, no meio, na cauda, de duplicatas, de chave ausente e da lista vazia. Para uma cascata de cópias, executar `INC 30`, `INC 20`, `INC 10`, `INC 20`, `REM 20`, `INC 30`, `REM 30`, `INC 25`: versões 3, 5 e 7 devem conter `10, 20, 30`; versão 8, `10, 20, 25, 30`. Conferir as entradas `teste04.in` e `teste05.in`.
 
 ### 4. [#4 — `SUC` estrito em versões históricas](https://github.com/erikbayerlein/advanced-data-structures/issues/4)
 
@@ -58,7 +53,7 @@ Use [TRABALHO.md](TRABALHO.md) e [README.md](README.md) como fontes dos requisit
 
 ## Como executar a verificação de saída
 
-Entre na pasta [`trabalhos/graduacao/`](trabalhos/graduacao/). As verificações automatizadas disponíveis são `sh test_issue01.sh` e `sh test_issue02.sh`; a segunda já compara `teste01` e `teste02` com os `.out` publicados. Para conferir um deles manualmente:
+Entre na pasta [`trabalhos/graduacao/`](trabalhos/graduacao/). As verificações automatizadas disponíveis são `sh test_issue01.sh`, `sh test_issue02.sh` e `sh test_issue03.sh`. A segunda compara `teste01` e `teste02` completos; a terceira compara os `IMP` de `teste04` e `teste05` após excluir temporariamente `SUC`. Para conferir um dos pares completos manualmente:
 
 ```sh
 make build
@@ -66,7 +61,7 @@ make run INPUT=../../testes/teste01.in > /tmp/trabalho01-obtido.out
 diff -u ../../testes/teste01.out /tmp/trabalho01-obtido.out
 ```
 
-Os `.out` atuais servem como oráculo literal dos cinco pares publicados. Ajuste o caminho relativo de `INPUT` se a pasta escolhida mudar. Um `diff` sem saída indica igualdade de bytes; a suíte da #5 deverá automatizar os cinco pares. **Ainda não rode `teste03` a `teste05` como teste de aceite:** eles exigem `SUC` e `REM` das issues #3 e #4.
+Os `.out` atuais servem como oráculo literal dos cinco pares publicados. Ajuste o caminho relativo de `INPUT` se a pasta escolhida mudar. Um `diff` sem saída indica igualdade de bytes; a suíte da #5 deverá automatizar os cinco pares completos. **Ainda não rode `teste03` a `teste05` integralmente como teste de aceite:** eles exigem `SUC` da issue #4.
 
 ## Decisões ainda abertas e limites da informação
 

@@ -84,6 +84,10 @@ int main(int argc, char* argv[]) {
             list.include(command.number);
             continue;
         }
+        if (command.operation == Operation::Remove) {
+            list.remove(command.number);
+            continue;
+        }
         if (command.operation != Operation::Print) {
             std::cerr << "linha " << line_number << ": operação ainda não implementada\n";
             return 2;
