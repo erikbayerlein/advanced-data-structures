@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-struct Node;
+#include "persistent_list.hpp"
 
 enum class Operation { Include, Remove, Successor, Print };
 
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
         return 2;
     }
 
-    std::vector<Node*> heads{nullptr};
+    PersistentList list;
     std::string line;
     std::size_t line_number = 0;
     while (std::getline(input, line)) {
@@ -80,21 +80,16 @@ int main(int argc, char* argv[]) {
             std::cerr << "linha " << line_number << ": comando inválido\n";
             return 2;
         }
+        if (command.operation == Operation::Include) {
+            list.include(command.number);
+            continue;
+        }
         if (command.operation != Operation::Print) {
             std::cerr << "linha " << line_number << ": operação ainda não implementada\n";
             return 2;
         }
-
-        const std::size_t version =
-            command.version >= 0 &&
-                    static_cast<std::uint64_t>(command.version) < heads.size()
-                ? static_cast<std::size_t>(command.version)
-                : heads.size() - 1;
-        if (heads[version] != nullptr) {
-            std::cerr << "linha " << line_number << ": impressão não implementada\n";
-            return 2;
-        }
-        std::cout << line << "\n\n";
+        std::cout << line << '\n';
+        list.print(command.version, std::cout);
     }
 
     if (!input.eof()) {
