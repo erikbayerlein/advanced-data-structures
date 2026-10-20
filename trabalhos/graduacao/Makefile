@@ -7,8 +7,8 @@ export INPUT
 
 build: programa
 
-programa: main.cpp
-	@$(CXX) $(CXXFLAGS) $< -o $@
+programa: main.cpp persistent_list.cpp persistent_list.hpp
+	@$(CXX) $(CXXFLAGS) main.cpp persistent_list.cpp -o $@
 
 run: build
 	@./programa "$$INPUT"
