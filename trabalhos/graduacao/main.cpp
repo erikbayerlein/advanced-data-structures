@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -88,11 +89,17 @@ int main(int argc, char* argv[]) {
             list.remove(command.number);
             continue;
         }
-        if (command.operation != Operation::Print) {
-            std::cerr << "linha " << line_number << ": operação ainda não implementada\n";
-            return 2;
-        }
         std::cout << line << '\n';
+        if (command.operation == Operation::Successor) {
+            const std::optional<std::int64_t> result =
+                list.successor(command.number, command.version);
+            if (result.has_value()) {
+                std::cout << *result << '\n';
+            } else {
+                std::cout << "inf\n";
+            }
+            continue;
+        }
         list.print(command.version, std::cout);
     }
 

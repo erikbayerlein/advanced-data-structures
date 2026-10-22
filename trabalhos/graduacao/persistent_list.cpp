@@ -129,6 +129,21 @@ void PersistentList::print(std::int64_t requested_version,
     output << '\n';
 }
 
+std::optional<std::int64_t> PersistentList::successor(
+    std::int64_t key, std::int64_t requested_version) const {
+    const std::size_t version = resolve_version(requested_version);
+    const Node* current = heads_[version];
+    // Pula todas as chaves <= key (inclusive repetidas iguais a key). A lista
+    // e ordenada, entao o primeiro no restante e o sucessor estrito.
+    while (current != nullptr && current->key <= key) {
+        current = next_at(current, version);
+    }
+    if (current == nullptr) {
+        return std::nullopt;
+    }
+    return current->key;
+}
+
 std::size_t PersistentList::version_count() const noexcept {
     return heads_.size();
 }
