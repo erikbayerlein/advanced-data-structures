@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <ostream>
 #include <vector>
 
@@ -15,6 +16,10 @@ public:
     void include(std::int64_t key);
     void remove(std::int64_t key);
     void print(std::int64_t requested_version, std::ostream& output) const;
+    // Menor chave estritamente maior que `key` na versao pedida (ou na mais
+    // recente se a versao nao existir). std::nullopt representa `inf`.
+    std::optional<std::int64_t> successor(std::int64_t key,
+                                          std::int64_t requested_version) const;
 
     std::size_t version_count() const noexcept;
     std::size_t node_count() const noexcept;
