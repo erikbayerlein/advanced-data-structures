@@ -4,7 +4,9 @@ Lista encadeada ordenada **parcialmente persistente**, pelo método de cópia de
 
 ## Equipe
 
-<!-- TODO: nomes e matrículas -->
+- Marcelo Marques (matrícula 536927)
+- Julia Naomi (matrícula 538606)
+- Erik Bayerlein (matrícula 537606)
 
 ## Linguagem e ambiente
 
