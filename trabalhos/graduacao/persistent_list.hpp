@@ -23,7 +23,9 @@ public:
 
     std::size_t version_count() const noexcept;
     std::size_t node_count() const noexcept;
+    std::size_t modification_count() const noexcept;
     bool validate_current_links() const;
+    bool validate_version(std::size_t version) const;
 
 private:
     struct Node;
