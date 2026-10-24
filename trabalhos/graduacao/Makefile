@@ -3,6 +3,10 @@ CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra -Wpedantic
 
 export INPUT
 
+# Com `make -C pasta run`, o make imprimiria "Entering directory" no stdout,
+# misturado às respostas comparadas byte a byte.
+MAKEFLAGS += --no-print-directory
+
 .PHONY: build run test
 
 build: programa
