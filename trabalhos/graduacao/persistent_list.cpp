@@ -168,3 +168,30 @@ bool PersistentList::validate_current_links() const {
     }
     return true;
 }
+
+std::size_t PersistentList::modification_count() const noexcept {
+    std::size_t total = 0;
+    for (const std::unique_ptr<Node>& node : nodes_) {
+        total += node->modification_count;
+    }
+    return total;
+}
+
+bool PersistentList::validate_version(std::size_t version) const {
+    if (version >= heads_.size()) {
+        return false;
+    }
+    const Node* previous = nullptr;
+    const Node* current = heads_[version];
+    std::size_t visited = 0;
+    while (current != nullptr) {
+        if (++visited > nodes_.size() ||
+            (previous != nullptr && previous->key > current->key) ||
+            current->modification_count > current->modifications.size()) {
+            return false;
+        }
+        previous = current;
+        current = next_at(current, version);
+    }
+    return true;
+}
