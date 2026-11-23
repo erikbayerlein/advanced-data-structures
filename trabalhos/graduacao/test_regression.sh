@@ -1,6 +1,6 @@
 #!/bin/sh
-# Regressao de saida exata: compila, roda testes/teste01..05 e compara o stdout
-# byte a byte com os .out do professor. Sai com codigo != 0 em qualquer falha.
+# Regressao de saida exata: compila, roda testes/teste01..09 e compara o stdout
+# byte a byte com os .out correspondentes. Sai com codigo != 0 em qualquer falha.
 # Uso: sh test_regression.sh   (qualquer diretorio)
 set -eu
 
@@ -27,8 +27,8 @@ if [ -s "$work/build.out" ] || [ -s "$work/build.err" ]; then
     exit 1
 fi
 
-# 2. Casos oficiais: comparacao literal (cmp), sem nenhuma normalizacao.
-for number in 01 02 03 04 05; do
+# 2. Casos oficiais (01..05) e adicionais (06..09): comparacao literal.
+for number in 01 02 03 04 05 06 07 08 09; do
     input="$tests_dir/teste${number}.in"
     expected="$tests_dir/teste${number}.out"
     if [ ! -f "$input" ] || [ ! -f "$expected" ]; then
@@ -92,4 +92,4 @@ if [ "$status" -ne 0 ]; then
     echo 'Regressao: FALHOU' >&2
     exit 1
 fi
-echo 'Regressao: 5/5 testes oficiais identicos byte a byte'
+echo 'Regressao: 9/9 testes identicos byte a byte'

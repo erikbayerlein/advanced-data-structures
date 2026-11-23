@@ -1,0 +1,28 @@
+SUC  0 99
+7
+IMP 99
+7
+SUC 7 99
+inf
+SUC 0 -1
+7
+IMP -1
+7
+SUC -1 1
+7
+SUC -1 2
+3
+IMP 3
+3, 7
+IMP   2
+3, 7
+IMP 2
+3, 7
+IMP 4
+7
+SUC 3 2
+7
+SUC 3 4
+7
+SUC 7 4
+inf

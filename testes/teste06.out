@@ -1,0 +1,26 @@
+IMP 0
+
+SUC 0 0
+inf
+IMP 5
+2, 5, 5, 5, 9
+SUC 5 5
+9
+SUC 4 5
+5
+IMP 5
+2, 5, 5, 5, 9
+IMP 6
+2, 5, 5, 9
+SUC 5 8
+9
+IMP 9
+2, 9
+IMP 11
+
+IMP 3
+5, 5, 5
+SUC 4 3
+5
+SUC 5 3
+inf

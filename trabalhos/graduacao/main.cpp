@@ -81,26 +81,29 @@ int main(int argc, char* argv[]) {
             std::cerr << "linha " << line_number << ": comando inválido\n";
             return 2;
         }
-        if (command.operation == Operation::Include) {
-            list.include(command.number);
-            continue;
-        }
-        if (command.operation == Operation::Remove) {
-            list.remove(command.number);
-            continue;
-        }
-        std::cout << line << '\n';
-        if (command.operation == Operation::Successor) {
-            const std::optional<std::int64_t> result =
-                list.successor(command.number, command.version);
-            if (result.has_value()) {
-                std::cout << *result << '\n';
-            } else {
-                std::cout << "inf\n";
+        switch (command.operation) {
+            case Operation::Include:
+                list.include(command.number);
+                break;
+            case Operation::Remove:
+                list.remove(command.number);
+                break;
+            case Operation::Successor: {
+                std::cout << line << '\n';
+                const std::optional<std::int64_t> result =
+                    list.successor(command.number, command.version);
+                if (result.has_value()) {
+                    std::cout << *result << '\n';
+                } else {
+                    std::cout << "inf\n";
+                }
+                break;
             }
-            continue;
+            case Operation::Print:
+                std::cout << line << '\n';
+                list.print(command.version, std::cout);
+                break;
         }
-        list.print(command.version, std::cout);
     }
 
     if (!input.eof()) {

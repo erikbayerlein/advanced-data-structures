@@ -96,7 +96,7 @@ Seja `n` o tamanho da versão envolvida e `v` o número de versões.
 ## Testes
 
 ```sh
-make test               # teste01..05 do professor, byte a byte (test_regression.sh)
+make test               # teste01..05 do professor e teste06..09 adicionais, byte a byte
 sh test_issue01.sh      # versão 0, extensão de INPUT, erros de entrada
 sh test_issue02.sh      # INC/IMP, histórico, cópias e retornos (test_issue02.cpp)
 sh test_issue03.sh      # REM: cabeça/meio/cauda, ausente, cascatas (test_issue03.cpp)
