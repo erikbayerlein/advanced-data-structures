@@ -1,6 +1,6 @@
 # Repasse de implementação do trabalho de Graduação de van Emde Boas
 
-**Estado em 23/11/2026.** O enunciado foi analisado, a arquitetura foi decidida e as atividades foram publicadas. A implementação da vEB ainda precisa começar. Inicie pela [etapa 01, issue #11](https://github.com/erikbayerlein/advanced-data-structures/issues/11).
+**Estado em 24/11/2026.** As etapas 01 e 02 foram concluídas e validadas. O executável lê `INPUT`, aceita chaves distintas de 32 bits e responde a `INC` e `IMP`. A próxima etapa é [adicionar multiplicidades na issue #13](https://github.com/erikbayerlein/advanced-data-structures/issues/13).
 
 - [GitHub Project advanced-data-structures](https://github.com/users/erikbayerlein/projects/6) e [repositório das issues](https://github.com/erikbayerlein/advanced-data-structures/issues)
 - [Enunciado](TRABALHO.md), [regras de entrega](README.md) e [pares de teste oficiais](testes/)
@@ -12,9 +12,9 @@
 1. Revisão do enunciado, do README, dos modelos da equipe, dos oito pares oficiais e das fontes de apoio. O guia registra a especificação dos comandos, os custos, as alternativas e as referências por seção.
 2. Segunda revisão da aula de Victor Campos com legendas automáticas em português e quadros dos algoritmos. A representação proposta abaixo segue os campos, as transições e a decomposição do professor. As adaptações para multiplicidade e para a tabela específica do trabalho foram decididas com base no enunciado.
 3. Conferência dos oito `.out` originais com um oráculo de multiconjunto. O oráculo reproduziu os arquivos byte a byte, inclusive linhas em branco, `inf` e `-inf`. A execução dos oito testes com a solução será feita na etapa 07.
-4. Publicação das nove issues de [#11](https://github.com/erikbayerlein/advanced-data-structures/issues/11) a [#19](https://github.com/erikbayerlein/advanced-data-structures/issues/19) no quadro, ordenadas pelos prefixos `[vEB 01/09]` a `[vEB 09/09]` em `Todo` e com dependências nativas no GitHub. Cada issue tem critérios de aceite, exemplos de teste e referências acessíveis pelo GitHub.
+4. Publicação das nove issues de [#11](https://github.com/erikbayerlein/advanced-data-structures/issues/11) a [#19](https://github.com/erikbayerlein/advanced-data-structures/issues/19) no quadro, ordenadas pelos prefixos `[vEB 01/09]` a `[vEB 09/09]` e com dependências nativas no GitHub. Cada issue tem critérios de aceite, exemplos de teste e referências acessíveis pelo GitHub.
 
-A pasta [`trabalhos/nome-equipe/`](trabalhos/nome-equipe/) contém o modelo de entrega. Seu `Makefile` referencia `main.cpp`, que ainda não existe neste projeto, e o README de exemplo descreve uma árvore persistente. A localização inicial proposta para a implementação é `trabalhos/graduacao/`, dentro desta pasta do trabalho. Ela pode assumir o nome definitivo da equipe na entrega. Os números das issues pertencem ao repositório `erikbayerlein/advanced-data-structures`, enquanto a origem deste checkout local é o repositório do professor.
+A implementação está em [`trabalhos/graduacao/`](trabalhos/graduacao/). A pasta [`trabalhos/nome-equipe/`](trabalhos/nome-equipe/) contém o modelo de entrega do professor. Os números das issues pertencem ao repositório `erikbayerlein/advanced-data-structures`.
 
 ## Decisões para levar à implementação
 
@@ -30,19 +30,21 @@ A pasta [`trabalhos/nome-equipe/`](trabalhos/nome-equipe/) contém o modelo de e
 
 A aula descreve a tabela esparsa com acesso constante com alta probabilidade na análise. Para a tabela exigida no trabalho, explique a garantia em termos de **custo esperado da sondagem** e **amortização** da reconstrução. A redução pela metade limita espaço em função das chaves **atuais**. `IMP` deve contabilizar também as ocorrências emitidas. [Enunciado, linhas 12–28](TRABALHO.md#L12) · [Pătrașcu e Thorup, § 5](https://people.csail.mit.edu/mip/papers/charhash/charhash.pdf#page=24)
 
-## O que falta fazer, em ordem
+## Etapas concluídas
 
 ### 01. [#11 — Preparar execução Linux, parser e `IMP` vazio](https://github.com/erikbayerlein/advanced-data-structures/issues/11)
 
-**Como fazer.** Criar o executável da solução, ler o arquivo indicado por `make run INPUT=...`, validar chave decimal sem sinal e preservar o texto da operação. Começar com o caso `IMP` vazio, com segunda linha em branco. Silenciar o eco de receitas do Make.
+**Feito.** O executável em `main.cpp` lê o arquivo indicado por `make run INPUT=...`, valida a chave decimal sem sinal e preserva o texto de `IMP`. O `Makefile` mantém o `stdout` reservado à saída do programa.
 
-**Como testar.** Compile em Linux. Passe um arquivo chamado `entrada vazia.in` com duas linhas `IMP`. Compare com `IMP\n\nIMP\n\n`. Teste arquivo inexistente, entrada vazia e limites do parser, incluindo `4294967296` como erro de entrada.
+**Como verificar.** Execute `make test` em `trabalhos/graduacao/`. O teste de interface cobre caminho com espaços, CRLF, `IMP` vazio, eco do comando, falta de arquivo e entrada inválida.
 
 ### 02. [#12 — Implementar `INC` e `IMP` com a vEB esparsa](https://github.com/erikbayerlein/advanced-data-structures/issues/12)
 
-**Como fazer.** Implemente a decomposição em bits, o caso base, os extremos e o resumo. Na primeira inserção num nó, guarde `min = max` e encerre. Na troca de mínimo, recompute as coordenadas do registro deslocado. Implemente a tabela de clusters do zero, com tabulação compartilhada, colisões por tentativa linear e crescimento por dobra. Emita as chaves distintas de `IMP` percorrendo o resumo em ordem e recompondo os resíduos. A próxima etapa acrescenta multiplicidades.
+**Feito.** `van_emde_boas.cpp` implementa o mínimo externo, o máximo em cache, o caso base e o percurso ordenado do resumo usado em `IMP`. `cluster_table.hpp` implementa tabulação compartilhada, tentativa linear circular e crescimento por dobra. A árvore armazena chaves distintas nesta etapa.
 
-**Como testar.** Compare `teste01` e `teste02` completos. Insira `65536`, `4294967295`, `65535`, `0` e confira `0, 65535, 65536, 4294967295`. Teste colisão, retorno circular, busca ausente e rehash isoladamente. Um único registro na árvore não deve materializar filhos nem tabela.
+**Como verificar.** `make test` compara `teste01` e `teste02` byte a byte e exercita chaves-limite, inserção decrescente, colisões, volta circular, crescimento e nós unitários sem alocação de filhos. A suíte passou em macOS e em Alpine Linux com GNU Make e g++.
+
+## O que falta fazer, em ordem
 
 ### 03. [#13 — Aplicar multiplicidades a `INC` e `IMP`](https://github.com/erikbayerlein/advanced-data-structures/issues/13)
 
