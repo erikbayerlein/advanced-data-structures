@@ -53,4 +53,12 @@ printf 'INC 4294967295\nINC 2147483648\nINC 65536\nINC 65535\nINC 3\nINC 2\nINC 
 printf 'IMP\n0, 1, 2, 3, 65535, 65536, 2147483648, 4294967295\n' > "$test_dir/esperado"
 check_output "$PWD/$test_dir/decrescente.in" "$test_dir/esperado"
 
+printf 'INC 9\nINC 9\nIMP\nINC 1\nINC 9\nIMP\n' > "$test_dir/multiplicidades.in"
+printf 'IMP\n9, 9\nIMP\n1, 9, 9, 9\n' > "$test_dir/esperado"
+check_output "$test_dir/multiplicidades.in" "$test_dir/esperado"
+
+printf 'INC 4294967295\nINC 0\nINC 4294967295\nINC 65536\nINC 65535\nINC 0\nIMP\n' > "$test_dir/extremos-repetidos.in"
+printf 'IMP\n0, 0, 65535, 65536, 4294967295, 4294967295\n' > "$test_dir/esperado"
+check_output "$test_dir/extremos-repetidos.in" "$test_dir/esperado"
+
 printf 'Interface de linha de comando verificada\n'

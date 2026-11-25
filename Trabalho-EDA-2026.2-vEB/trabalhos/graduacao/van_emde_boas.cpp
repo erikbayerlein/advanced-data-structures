@@ -2,7 +2,20 @@
 
 #include <algorithm>
 #include <cassert>
+#include <limits>
+#include <stdexcept>
 #include <utility>
+
+namespace {
+
+void add_occurrences(std::uint64_t& count, std::uint64_t added) {
+    if (added > std::numeric_limits<std::uint64_t>::max() - count) {
+        throw std::overflow_error("limite de ocorrências excedido");
+    }
+    count += added;
+}
+
+}  // namespace
 
 VanEmdeBoas::VanEmdeBoas(const SimpleTabulation& hash, unsigned bits)
     : hash_(hash), bits_(bits), clusters_(hash) {
@@ -10,29 +23,37 @@ VanEmdeBoas::VanEmdeBoas(const SimpleTabulation& hash, unsigned bits)
 }
 
 void VanEmdeBoas::insert(std::uint32_t key) {
-    assert(bits_ == 32 || (key >> bits_) == 0);
-    if (!minimum_) {
-        minimum_ = maximum_ = key;
-        return;
-    }
-    if (key == *minimum_) return;
+    insert(Record{key, 1});
+}
 
+void VanEmdeBoas::insert(Record record) {
+    assert(bits_ == 32 || (record.key >> bits_) == 0);
     if (bits_ == 1) {
-        minimum_ = 0;
-        maximum_ = 1;
-        base_has_both_keys_ = true;
+        add_occurrences(base_counts_[record.key], record.count);
+        maximum_ = std::max(maximum_, record.key);
         return;
     }
 
+    if (!minimum_) {
+        minimum_ = record;
+        maximum_ = record.key;
+        return;
+    }
+    if (record.key == minimum_->key) {
+        add_occurrences(minimum_->count, record.count);
+        return;
+    }
+
+    const bool replaces_minimum = record.key < minimum_->key;
+    Record routed = replaces_minimum ? *minimum_ : record;
     const unsigned low_bits = bits_ / 2;
-    const std::uint32_t routed_key = std::max(key, *minimum_);
-    const std::uint32_t index = routed_key >> low_bits;
-    const std::uint32_t residue = routed_key & ((std::uint32_t{1} << low_bits) - 1);
+    const std::uint32_t index = routed.key >> low_bits;
+    routed.key &= (std::uint32_t{1} << low_bits) - 1;
     if (auto* cluster = clusters_.find(index)) {
-        cluster->insert(residue);
+        cluster->insert(routed);
     } else {
         auto new_cluster = std::make_unique<VanEmdeBoas>(hash_, low_bits);
-        new_cluster->insert(residue);
+        new_cluster->insert(routed);
         auto new_summary = summary_ ? nullptr : std::make_unique<VanEmdeBoas>(hash_, bits_ - low_bits);
 
         // Depois de atualizar o resumo, registrar o filho não pode exigir uma alocação.
@@ -43,25 +64,36 @@ void VanEmdeBoas::insert(std::uint32_t key) {
         if (new_summary) summary_ = std::move(new_summary);
     }
 
-    if (key < *minimum_) minimum_ = key;
-    if (key > maximum_) maximum_ = key;
+    if (replaces_minimum) minimum_ = record;
+    maximum_ = std::max(maximum_, record.key);
 }
 
 void VanEmdeBoas::for_each(const std::function<void(std::uint32_t)>& visit) const {
-    if (!minimum_) return;
-    visit(*minimum_);
+    for_each_record([&](Record record) {
+        for (; record.count != 0; --record.count) visit(record.key);
+    });
+}
+
+void VanEmdeBoas::for_each_record(const std::function<void(Record)>& visit) const {
     if (bits_ == 1) {
-        if (base_has_both_keys_) visit(1);
+        for (std::uint32_t key = 0; key < base_counts_.size(); ++key) {
+            if (base_counts_[key] != 0) visit(Record{key, base_counts_[key]});
+        }
         return;
     }
+    if (!minimum_) return;
+    visit(*minimum_);
     if (!summary_) return;
 
     const unsigned low_bits = bits_ / 2;
-    summary_->for_each([&](std::uint32_t index) {
-        const auto* cluster = clusters_.find(index);
+    summary_->for_each_record([&](Record index) {
+        assert(index.count == 1);
+        const auto* cluster = clusters_.find(index.key);
         assert(cluster);
-        cluster->for_each([&](std::uint32_t residue) {
-            visit((index << low_bits) | residue);
+        const std::uint32_t prefix = index.key << low_bits;
+        cluster->for_each_record([&](Record record) {
+            record.key |= prefix;
+            visit(record);
         });
     });
 }

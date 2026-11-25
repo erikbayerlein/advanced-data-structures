@@ -1,6 +1,6 @@
 # Repasse de implementação do trabalho de Graduação de van Emde Boas
 
-**Estado em 24/11/2026.** As etapas 01 e 02 foram concluídas e validadas. O executável lê `INPUT`, aceita chaves distintas de 32 bits e responde a `INC` e `IMP`. A próxima etapa é [adicionar multiplicidades na issue #13](https://github.com/erikbayerlein/advanced-data-structures/issues/13).
+**Estado em 25/11/2026.** As etapas 01 a 03 foram concluídas e validadas. O executável lê `INPUT` e executa `INC` e `IMP` para um multiconjunto de chaves de 32 bits. A próxima etapa é [implementar o sucessor estrito na issue #14](https://github.com/erikbayerlein/advanced-data-structures/issues/14).
 
 - [GitHub Project advanced-data-structures](https://github.com/users/erikbayerlein/projects/6) e [repositório das issues](https://github.com/erikbayerlein/advanced-data-structures/issues)
 - [Enunciado](TRABALHO.md), [regras de entrega](README.md) e [pares de teste oficiais](testes/)
@@ -40,21 +40,21 @@ A aula descreve a tabela esparsa com acesso constante com alta probabilidade na 
 
 ### 02. [#12 — Implementar `INC` e `IMP` com a vEB esparsa](https://github.com/erikbayerlein/advanced-data-structures/issues/12)
 
-**Feito.** `van_emde_boas.cpp` implementa o mínimo externo, o máximo em cache, o caso base e o percurso ordenado do resumo usado em `IMP`. `cluster_table.hpp` implementa tabulação compartilhada, tentativa linear circular e crescimento por dobra. A árvore armazena chaves distintas nesta etapa.
+**Feito.** `van_emde_boas.cpp` implementa o mínimo externo, o máximo em cache, o caso base e o percurso ordenado do resumo usado em `IMP`. `cluster_table.hpp` implementa tabulação compartilhada, tentativa linear circular e crescimento por dobra.
 
 **Como verificar.** `make test` compara `teste01` e `teste02` byte a byte e exercita chaves-limite, inserção decrescente, colisões, volta circular, crescimento e nós unitários sem alocação de filhos. A suíte passou em macOS e em Alpine Linux com GNU Make e g++.
 
-## O que falta fazer, em ordem
-
 ### 03. [#13 — Aplicar multiplicidades a `INC` e `IMP`](https://github.com/erikbayerlein/advanced-data-structures/issues/13)
 
-**Como fazer.** Localize a chave pelo mínimo e pelo cluster correspondente. Incremente o contador se já existir. O registro canônico contém a chave e sua frequência, e é movido inteiro na troca do mínimo. `IMP` emite a frequência sem duplicar nós ou índices.
+**Feito.** Cada registro de dados guarda chave e frequência de 64 bits. Na troca do mínimo, o registro anterior desce inteiro ao cluster de destino. Na base de 1 bit, os dois contadores indicam presença e multiplicidade de `0` e `1`. O `max` continua sendo a cópia de uma chave, e o resumo recebe um único índice por cluster ocupado. `IMP` repete cada chave em fluxo, na ordem da vEB. Ultrapassar o limite de um contador produz diagnóstico em `stderr` e código de saída `2`.
 
-**Como testar.** `INC 9`, `INC 9`, `INC 1`, `INC 9`, `IMP` deve emitir `1, 9, 9, 9`. Cubra repetições no mínimo, no máximo e no caso base. Repita a mesma chave e verifique que a quantidade de nós, índices e posições alocadas não cresce.
+**Como verificar.** `make test` compara `9, 9` antes da troca de mínimo e `1, 9, 9, 9` depois. A suíte também verifica duplicatas em `0` e `4294967295`, os dois contadores da base, o limite de `uint64_t` e as invariantes de alocação. Uma chave repetida 10 mil vezes permanece num nó sem filhos nem resumo. Repetir chaves com a tabela na metade da capacidade mantém seus quatro clusters e seus oito slots.
+
+## O que falta fazer, em ordem
 
 ### 04. [#14 — Implementar sucessor estrito](https://github.com/erikbayerlein/advanced-data-structures/issues/14)
 
-**Como fazer.** Use `N < min` e `N >= max` para decidir as fronteiras. Escolha procurar no cluster se seu máximo local é maior que o resíduo. Caso contrário, encontre o próximo índice no resumo e use o mínimo do filho correspondente. Ecoe a linha e imprima `inf` quando ausente.
+**Como fazer.** Na base de 1 bit, consulte `base_counts_` para determinar presença. Nos nós internos, `minimum_` contém o registro do menor valor. Use `N < min` e `N >= max` para decidir as fronteiras. Escolha procurar no cluster se seu máximo local é maior que o resíduo. Caso contrário, encontre o próximo índice no resumo e use o mínimo do filho correspondente. Ecoe a linha e imprima `inf` quando ausente.
 
 **Como testar.** Com `{0, 65534, 65535, 65536, 65536, 65538, 131072, 4294967295}`, `SUC 65534`, `SUC 65535`, `SUC 65536` e `SUC 4294967295` devolvem `65535`, `65536`, `65538` e `inf`. Compare `teste03` integralmente. A consulta também precisa funcionar com limiar ausente, como `65537`.
 

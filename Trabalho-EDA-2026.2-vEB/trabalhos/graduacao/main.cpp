@@ -5,6 +5,7 @@
 #include <optional>
 #include <random>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
 #include "van_emde_boas.hpp"
@@ -91,7 +92,12 @@ int main(int argc, char* argv[]) {
                 break;
             }
             case Operation::Include:
-                tree.insert(command->key);
+                try {
+                    tree.insert(command->key);
+                } catch (const std::overflow_error& error) {
+                    std::cerr << error.what() << " na linha " << line_number << '\n';
+                    return 2;
+                }
                 break;
             case Operation::Remove:
             case Operation::Successor:
